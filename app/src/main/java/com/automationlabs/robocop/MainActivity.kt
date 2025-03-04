@@ -20,15 +20,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.automationlabs.robocop.ui.theme.RobocopTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -48,7 +52,9 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     Greeting(
                         name = "Droid",
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier
+                            .semantics { testTagsAsResourceId = true }
+                            .padding(innerPadding)
                     )
                 }
             }
@@ -76,7 +82,9 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                 buttonColor = Color.Blue // Change to red on click
                 buttonText = "Ich wurde geklickt!" // Change text on click
             },
-            modifier = Modifier.testTag("${buttonText}_button").padding(16.dp),
+            modifier = Modifier
+                .testTag("${buttonText}_button")
+                .padding(16.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = buttonColor, // Use the state variable
                 contentColor = Color.White
