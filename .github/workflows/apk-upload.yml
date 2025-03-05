@@ -1,0 +1,35 @@
+name: APK Upload
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 23 * * *
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Robocop APK
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
