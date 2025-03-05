@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: 0 23 * * *
-  push:
-    branches:
-      - main
 
 jobs:
   generate-apk:
