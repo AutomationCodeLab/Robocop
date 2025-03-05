@@ -1,0 +1,20 @@
+name: Dispatch - APK Upload Completion to Robocop Automate
+
+on:
+  workflow_run:
+    workflows: ["APK Upload"]
+    types:
+      - completed
+
+jobs:
+  dispatch:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch to Robocop Automate
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.ACTIONS_TOKEN }}
+          repository: AutomationCodeLab/Robocop-automate
+          event-type: Robocop APK Uploaded
+          client-payload: '{ "run_id": ${{ github.event.workflow_run.id }} }'
